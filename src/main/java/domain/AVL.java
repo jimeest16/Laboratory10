@@ -185,6 +185,14 @@ public class AVL implements  Tree {
                     node.data = value;
                     node.right = remove(node.right, value);
                 }
+                //si el arbol no es balanceado AVL,  re-balancear para que quede como un avl
+                switch (getBalanceFactor(root) ){
+                    case 0: leftRotate(node);//balanceado pero dejar como AVL
+                    case 1: return node; //ya es AVL por la derecha
+                    case -1: return node; //ya es AVL por la izquierda
+                    case -2: return rightRotate(node); //rotación a la derecha
+                    case 2: return leftRotate(node);//rotación a la izquierda
+                }
             }
         }
         return node; //retorna el nodo modificado o no
@@ -426,5 +434,26 @@ public class AVL implements  Tree {
             return children(node.right, element);
         }
     }
-}
-// uso de los operadores ternarios: la primer parte debe de cumplirse , la segunda no
+    // uso de los operadores ternarios: la primer parte debe de cumplirse, la segunda no
+
+    public boolean isBalanced(){
+        switch (getBalanceFactor(root) ){
+            case 0: return true;
+            case 1: return false;
+            case -1: return false;
+    }
+    return false;
+    }
+
+    public boolean isAVL(){
+        switch (getBalanceFactor(root) ){
+            case 0: return false;
+            case 1: return true;
+            case -1: return true;
+        }
+        return false;
+    }
+
+
+}//fin class AVL
+
