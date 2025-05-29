@@ -17,6 +17,9 @@ public class AVL implements  Tree {
             throw new TreeException("AVL Binary Search Tree is empty");
         return size(root);
     }
+    public BTreeNode getRoot() {
+        return root;
+    }
 
     private int size(BTreeNode node) {
         if (node == null) return 0;

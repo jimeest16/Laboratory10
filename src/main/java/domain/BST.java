@@ -6,7 +6,7 @@ package domain;
  * BST = Binary Search Tree (Arbol de Búsqueda Binaria)
  * */
 public class BST implements  Tree {
-    private BTreeNode root; //se refiere a la raiz del arbol
+    public BTreeNode root; //se refiere a la raiz del arbol
 
     @Override
     public int size() throws TreeException {
@@ -14,7 +14,9 @@ public class BST implements  Tree {
             throw new TreeException("Binary Search Tree is empty");
         return size(root);
     }
-
+    public BTreeNode getRoot() {
+        return root;
+    }
     private int size(BTreeNode node){
         if(node==null) return 0;
         else return 1 + size(node.left) + size(node.right);
