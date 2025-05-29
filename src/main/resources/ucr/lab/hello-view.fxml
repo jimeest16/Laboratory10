@@ -38,7 +38,7 @@
         </VBox>
     </left>
     <center>
-        <AnchorPane fx:id="ap" prefHeight="684.0" prefWidth="775.0" style="-fx-background-color: #afd6dc;" BorderPane.alignment="CENTER">
+        <AnchorPane fx:id="ap" prefHeight="712.0" prefWidth="786.0" style="-fx-background-color: #afd6dc;" BorderPane.alignment="CENTER">
             <Text fx:id="txtMessage" fill="#f7f7f7" layoutX="4.0" layoutY="360.0" strokeType="OUTSIDE" strokeWidth="0.0" style="visibility: #dde7ba;" text="Laboratory No. 10" textAlignment="CENTER" wrappingWidth="781.94921875">
                 <font>
                     <Font name="Elephant" size="55.0" />

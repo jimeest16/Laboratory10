@@ -92,7 +92,7 @@ public class FXUtil {
     public static void drawBTreeNodes(GraphicsContext bTree, BTreeNode node, double posX, double posY, double spaceDispo) {
         if (node == null) return;
         // primero el nodo( OVAL)
-        bTree.setFill(Color.LIGHTCORAL);
+        bTree.setFill(Color.LIGHTBLUE);
         // LAS POSICIONES FUERON LAS MAS CERCANAS QUE PUDE LOGRAR A PROBAR
         bTree.fillOval(posX - 15, posY - 15, 30, 30);
         bTree.setStroke(Color.BLACK);

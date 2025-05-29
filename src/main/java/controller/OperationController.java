@@ -7,32 +7,42 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import util.FXUtil;
 
-
 public class OperationController {
 
     @FXML private Canvas treeCanvas;
     @FXML private RadioButton bstRadio;
     @FXML private RadioButton avlRadio;
     @FXML private Label balanceStatusLabel;
-    @FXML private ToggleGroup treeTypeGroup;
+    @FXML private ScrollPane scrollPane;
+    @FXML private Button addButton;
+    @FXML private Button removeButton;
+    @FXML private Button containsButton;
+    @FXML private Button heightButton;
+    @FXML private Button treeHeightButton;
+    @FXML private Button randomizeButton;
+
+    private ToggleGroup treeTypeGroup;
 
     private BST bstTree = new BST();
     private AVL avlTree = new AVL();
     private Tree currentTree;
 
     private double zoomActual = 1.0;
-    private double zoomStep = 0.1;// es el minimo antes que 0
+    private final double zoomStep = 0.1;
 
     @FXML
-    private ScrollPane scrollPane;
-    @FXML
     public void initialize() {
-        // SE INICIALIZA EN BST pero puedo variarlo con avl
-        currentTree = new BST();
+        // Grupo manual de RadioButtons
+        treeTypeGroup = new ToggleGroup();
+        bstRadio.setToggleGroup(treeTypeGroup);
+        avlRadio.setToggleGroup(treeTypeGroup);
+
+        // Valor inicial
+        currentTree = bstTree;
         bstRadio.setSelected(true);
 
 
-        scrollPane.setOnScroll(event -> {
+        treeCanvas.setOnScroll(event -> {
             if (event.isControlDown()) {
                 if (event.getDeltaY() > 0) {
                     zoomActual += zoomStep;
@@ -54,18 +64,14 @@ public class OperationController {
 
     @FXML
     public void choiceTree() {
-        if (bstRadio.isSelected()) {
-            currentTree = bstTree;
-        } else {
-            currentTree = avlTree;
-        }
+        currentTree = bstRadio.isSelected() ? bstTree : avlTree;
         drawTree();
     }
 
     @FXML
-    public void addBotton() {
+    public void addButton() {
         TextInputDialog dialog = new TextInputDialog();
-        dialog.setHeaderText("Please enter a value:");
+        dialog.setHeaderText("Enter value to add:");
         dialog.showAndWait().ifPresent(value -> {
             try {
                 currentTree.add(Integer.parseInt(value));
@@ -77,25 +83,23 @@ public class OperationController {
     }
 
     @FXML
-    public void removeBotton() {
+    public void removeButton() {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setHeaderText("Enter value to remove:");
         dialog.showAndWait().ifPresent(value -> {
             try {
-                try {
-                    currentTree.remove(Integer.parseInt(value));
-                } catch (TreeException e) {
-                    throw new RuntimeException(e);
-                }
+                currentTree.remove(Integer.parseInt(value));
                 drawTree();
             } catch (NumberFormatException e) {
                 showAlert("Invalid number!");
+            } catch (TreeException e) {
+                showAlert("Error: " + e.getMessage());
             }
         });
     }
 
     @FXML
-    public void containsBotton() {
+    public void containsButton() {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setHeaderText("Enter value to search:");
         dialog.showAndWait().ifPresent(value -> {
@@ -105,13 +109,13 @@ public class OperationController {
             } catch (NumberFormatException e) {
                 showAlert("Invalid number!");
             } catch (TreeException e) {
-                throw new RuntimeException(e);
+                showAlert("Error: " + e.getMessage());
             }
         });
     }
 
     @FXML
-    public void heightBotton() {
+    public void heightButton() {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setHeaderText("Enter node value:");
         dialog.showAndWait().ifPresent(value -> {
@@ -121,21 +125,25 @@ public class OperationController {
             } catch (NumberFormatException e) {
                 showAlert("Invalid input!");
             } catch (TreeException e) {
-                throw new RuntimeException(e);
+                showAlert("Error: " + e.getMessage());
             }
         });
     }
 
     @FXML
-    public void treeHeightBotton() throws TreeException {
-        int height = currentTree.height();
-        showAlert("Tree height is: " + height);
+    public void treeHeightButton() {
+        try {
+            int height = currentTree.height();
+            showAlert("Tree height is: " + height);
+        } catch (TreeException e) {
+            showAlert("Error: " + e.getMessage());
+        }
     }
 
     @FXML
     public void handleRandomize() {
         currentTree.clear();
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 10; i++) {
             currentTree.add((int) (Math.random() * 100));
         }
         drawTree();
@@ -143,17 +151,20 @@ public class OperationController {
 
     private void drawTree() {
         GraphicsContext gc = treeCanvas.getGraphicsContext2D();
+
         gc.clearRect(0, 0, treeCanvas.getWidth(), treeCanvas.getHeight());
 
-        double canvasWidth = 800;
+        double canvasWidth = 600;
         double canvasHeight = 600;
         treeCanvas.setWidth(canvasWidth);
         treeCanvas.setHeight(canvasHeight);
 
-        FXUtil.drawBTreeNodes(gc, (BTreeNode) currentTree.getRoot(), canvasWidth / 2, 40, canvasWidth / 4);
+        if (currentTree.getRoot() != null) {
+            FXUtil.drawBTreeNodes(gc, (BTreeNode) currentTree.getRoot(), canvasWidth / 2, 35, canvasWidth / 4);
+        }
+
         balanceStatusLabel.setText(currentTree.isBalanced() ? "Balanced ✓" : "Not Balanced ✗");
     }
-
 
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

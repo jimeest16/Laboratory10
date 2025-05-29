@@ -1,49 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Group?>
 <?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controller.OperationController"
-            prefWidth="900" prefHeight="700" style="-fx-background-color: #f0f4f8;">
+<AnchorPane prefHeight="520.0" prefWidth="800.0" style="-fx-background-color: #d7dcdd;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OperationController">
 
-    <!-- Título -->
-    <Label layoutX="20" layoutY="10" text="Árboles Binarios y AVL"
-           style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #2a3f54;"/>
 
-    <!-- RadioButtons para seleccionar el tipo de árbol -->
-    <RadioButton fx:id="bstRadio" layoutX="30" layoutY="55" text="BST" toggleGroup="treeTypeGroup"
-                 onAction="#choiceTree" selected="true"
-                 style="-fx-font-size: 16px; -fx-text-fill: #34495e;"/>
-    <RadioButton fx:id="avlRadio" layoutX="100" layoutY="55" text="AVL" toggleGroup="treeTypeGroup"
-                 onAction="#choiceTree"
-                 style="-fx-font-size: 16px; -fx-text-fill: #34495e;"/>
+    <VBox layoutX="14.0" layoutY="160.0" prefWidth="180" spacing="8">
+        <Label text="Choice a type of tree!">
+            <font>
+                <Font name="Elephant" size="14.0" />
+            </font>
+        </Label>
 
-    <!-- Botones de acción -->
-    <Button layoutX="30" layoutY="95" mnemonicParsing="false" onAction="#addBotton" text="Agregar"
-            style="-fx-background-color: #2980b9; -fx-text-fill: white; -fx-font-weight: bold;"/>
-    <Button layoutX="110" layoutY="95" mnemonicParsing="false" onAction="#removeBotton" text="Eliminar"
-            style="-fx-background-color: #c0392b; -fx-text-fill: white; -fx-font-weight: bold;"/>
-    <Button layoutX="200" layoutY="95" mnemonicParsing="false" onAction="#containsBotton" text="Buscar"
-            style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold;"/>
-    <Button layoutX="280" layoutY="95" mnemonicParsing="false" onAction="#heightBotton" text="Altura Nodo"
-            style="-fx-background-color: #8e44ad; -fx-text-fill: white; -fx-font-weight: bold;"/>
-    <Button layoutX="390" layoutY="95" mnemonicParsing="false" onAction="#treeHeightBotton" text="Altura Árbol"
-            style="-fx-background-color: #d35400; -fx-text-fill: white; -fx-font-weight: bold;"/>
-    <Button layoutX="500" layoutY="95" mnemonicParsing="false" onAction="#handleRandomize" text="Aleatorio"
-            style="-fx-background-color: #16a085; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        <RadioButton fx:id="bstRadio" onAction="#choiceTree" text="BST" />
+        <RadioButton fx:id="avlRadio" onAction="#choiceTree" text="AVL" />
 
-    <!-- Label para balance -->
-    <Label fx:id="balanceStatusLabel" layoutX="30" layoutY="140" text="Balance Status"
-           style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #34495e;"/>
+        <Separator />
 
-    <!-- ScrollPane que contiene el Canvas -->
-    <ScrollPane fx:id="scrollPane" layoutX="20" layoutY="170" prefWidth="860" prefHeight="500"
-                style="-fx-background-color: white; -fx-border-color: #34495e; -fx-border-width: 2;">
-        <content>
-            <Canvas fx:id="treeCanvas" width="800" height="600" />
-        </content>
+        <Button fx:id="addButton" maxWidth="160" onAction="#addButton" style="-fx-background-color: #e58572;" text="Add" />
+        <Button fx:id="removeButton" maxWidth="160" onAction="#removeButton" style="-fx-background-color: #e5bd72;" text="Remove" />
+        <Button fx:id="containsButton" maxWidth="160" onAction="#containsButton" style="-fx-background-color: #dfe572;" text="Contains" />
+        <Button fx:id="heightButton" maxWidth="160" onAction="#heightButton" style="-fx-background-color: #b6e572;" text="Height" />
+        <Button fx:id="treeHeightButton" maxWidth="160" onAction="#treeHeightButton" style="-fx-background-color: #72e5c0;" text="Tree Height" />
+        <Button fx:id="randomizeButton" maxWidth="160" onAction="#handleRandomize" style="-fx-background-color: #72d3e5;" text="Randomize" />
+
+        <Separator />
+
+        <Label fx:id="balanceStatusLabel" maxWidth="160" text="Balance Status" wrapText="true">
+            <font>
+                <Font name="Elephant" size="14.0" />
+            </font>
+        </Label>
+    </VBox>
+
+
+    <ScrollPane fx:id="scrollPane" layoutX="200.0" layoutY="160.0" prefHeight="340.0" prefWidth="580.0">
+        <Group fx:id="canvasGroup">
+            <Canvas fx:id="treeCanvas" height="500.0" width="1000.0" />
+        </Group>
     </ScrollPane>
+
+    <Pane layoutX="6.0" layoutY="14.0" prefHeight="130.0" prefWidth="780.0" style="-fx-background-color: #ebecec;">
+        <children>
+            <Text layoutX="90.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Graphic Binary Search Tree-Operations">
+                <font>
+                    <Font name="Elephant" size="28.0" />
+                </font>
+            </Text>
+            <Text layoutX="320.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Operations">
+                <font>
+                    <Font name="Berlin Sans FB Demi Bold" size="24.0" />
+                </font>
+            </Text>
+          <ImageView fitHeight="83.0" fitWidth="106.0" layoutX="663.0" layoutY="61.0">
+              <image>
+                  <Image preserveRatio="true" url="@image.png" />
+              </image>
+          </ImageView>
+        </children>
+
+    </Pane>
 
 </AnchorPane>
