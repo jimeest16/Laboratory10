@@ -17,6 +17,23 @@ public class BST implements  Tree {
     public BTreeNode getRoot() {
         return root;
     }
+
+    @Override
+    public boolean isBalanced() {
+        return isBalanced(root);
+    }
+    private boolean isBalanced(BTreeNode node){
+        if(node==null) return true;
+
+            int leftHeight=height(node.left);
+            int rightHeight=height(node.right);
+
+            if(Math.abs(leftHeight-rightHeight)>1) return false;
+
+            return isBalanced(node.left) && isBalanced(node.right);
+
+    }
+
     private int size(BTreeNode node){
         if(node==null) return 0;
         else return 1 + size(node.left) + size(node.right);

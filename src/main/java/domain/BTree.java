@@ -244,6 +244,16 @@ public class BTree implements  Tree {
         return postOrder(root);
     }
 
+    @Override
+    public Object getRoot() {
+        return null;
+    }
+
+    @Override
+    public boolean isBalanced() {
+        return false;
+    }
+
     //recorre el árbol de la forma: hijo izq-hijo der-nodo,
     private String postOrder(BTreeNode node){
         String result="";

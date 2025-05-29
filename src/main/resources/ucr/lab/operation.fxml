@@ -1,85 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OperationController">
+<AnchorPane xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.OperationController"
+            prefWidth="900" prefHeight="700" style="-fx-background-color: #f0f4f8;">
 
-        <Pane prefHeight="88.0" prefWidth="785.0" style="-fx-background-color: #c2f6ff;">
-            <Text fill="#000000d9" layoutX="93.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Graphic Binary Search Tree ">
-                <font>
-                    <Font name="Elephant" size="40.0" />
-                </font>
-            </Text>
-      <Text fill="#000000d9" layoutX="344.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Operations">
-         <font>
-            <Font name="Bodoni MT Condensed Bold" size="40.0" />
-         </font>
-      </Text>
-        </Pane>
+    <!-- Título -->
+    <Label layoutX="20" layoutY="10" text="Árboles Binarios y AVL"
+           style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #2a3f54;"/>
 
-           <!-- Botones de operaciones -->
-        <Pane layoutY="88.0" prefHeight="77.0" prefWidth="785.0">
-            <Button layoutX="649.0" layoutY="20.0" mnemonicParsing="false" onAction="#treeHeightBotton" prefWidth="130.0" text="Tree Height">
-                <font>
-            <Font name="Bell MT" size="20.0" />
-         </font>
-            </Button>
-            <Button layoutX="507.0" layoutY="20.0" mnemonicParsing="false" onAction="#heightBotton" prefWidth="132.0" text="Node Height">
-                <font>
-            <Font name="Bell MT" size="20.0" />
-         </font>
-            </Button>
-            <Button layoutX="387.0" layoutY="20.0" mnemonicParsing="false" onAction="#removeBotton" prefWidth="110.0" text="Remove">
-                <font>
-            <Font name="Bell MT" size="20.0" />
-         </font>
-            </Button>
-            <Button layoutX="267.0" layoutY="20.0" mnemonicParsing="false" onAction="#addBotton" prefWidth="110.0" text="Add">
-                <font>
-            <Font name="Bell MT" size="20.0" />
-         </font>
-            </Button>
-            <Button layoutX="137.0" layoutY="20.0" mnemonicParsing="false" onAction="#containsBotton" prefWidth="120.0" text="Contains">
-                <font>
-            <Font name="Bell MT" size="20.0" />
-         </font>
-            </Button>
-            <Button layoutX="7.0" layoutY="20.0" mnemonicParsing="false" onAction="#handleRandomize" prefWidth="120.0" text="Randomize">
-                <font>
-            <Font name="Bell MT" size="20.0" />
-         </font>
-            </Button>
-        </Pane>
+    <!-- RadioButtons para seleccionar el tipo de árbol -->
+    <RadioButton fx:id="bstRadio" layoutX="30" layoutY="55" text="BST" toggleGroup="treeTypeGroup"
+                 onAction="#choiceTree" selected="true"
+                 style="-fx-font-size: 16px; -fx-text-fill: #34495e;"/>
+    <RadioButton fx:id="avlRadio" layoutX="100" layoutY="55" text="AVL" toggleGroup="treeTypeGroup"
+                 onAction="#choiceTree"
+                 style="-fx-font-size: 16px; -fx-text-fill: #34495e;"/>
 
+    <!-- Botones de acción -->
+    <Button layoutX="30" layoutY="95" mnemonicParsing="false" onAction="#addBotton" text="Agregar"
+            style="-fx-background-color: #2980b9; -fx-text-fill: white; -fx-font-weight: bold;"/>
+    <Button layoutX="110" layoutY="95" mnemonicParsing="false" onAction="#removeBotton" text="Eliminar"
+            style="-fx-background-color: #c0392b; -fx-text-fill: white; -fx-font-weight: bold;"/>
+    <Button layoutX="200" layoutY="95" mnemonicParsing="false" onAction="#containsBotton" text="Buscar"
+            style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold;"/>
+    <Button layoutX="280" layoutY="95" mnemonicParsing="false" onAction="#heightBotton" text="Altura Nodo"
+            style="-fx-background-color: #8e44ad; -fx-text-fill: white; -fx-font-weight: bold;"/>
+    <Button layoutX="390" layoutY="95" mnemonicParsing="false" onAction="#treeHeightBotton" text="Altura Árbol"
+            style="-fx-background-color: #d35400; -fx-text-fill: white; -fx-font-weight: bold;"/>
+    <Button layoutX="500" layoutY="95" mnemonicParsing="false" onAction="#handleRandomize" text="Aleatorio"
+            style="-fx-background-color: #16a085; -fx-text-fill: white; -fx-font-weight: bold;"/>
 
-        <Pane layoutY="165.0" prefHeight="50.0" prefWidth="785.0">
-            <RadioButton fx:id="bstRadio" layoutX="20.0" layoutY="15.0" mnemonicParsing="false" onAction="#choiceTree" text="BST">
-                <font><Font size="16.0" /></font>
-         <toggleGroup>
-            <ToggleGroup fx:id="treeTypeGroup" />
-         </toggleGroup>
-            </RadioButton>
-            <RadioButton fx:id="avlRadio" layoutX="80.0" layoutY="15.0" mnemonicParsing="false" onAction="#choiceTree" text="AVL" toggleGroup="$treeTypeGroup">
-                <font><Font size="16.0" /></font>
-            </RadioButton>
-            <Label fx:id="balanceStatusLabel" layoutX="241.0" layoutY="15.0" style="-fx-font-size: 16px;" text="Is the tree balanced?">
-         <font>
-            <Font name="Book Antiqua" size="12.0" />
-         </font></Label>
-        </Pane>
+    <!-- Label para balance -->
+    <Label fx:id="balanceStatusLabel" layoutX="30" layoutY="140" text="Balance Status"
+           style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #34495e;"/>
 
-        <!-- Área del Canvas -->
-        <ScrollPane layoutX="10.0" layoutY="215.0" prefHeight="450.0" prefWidth="765.0" style="-fx-border-color: #c2f6ff; -fx-border-width: 2;">
-            <Canvas fx:id="treeCanvas" height="444.0" width="758.0" />
-        </ScrollPane>
+    <!-- ScrollPane que contiene el Canvas -->
+    <ScrollPane fx:id="scrollPane" layoutX="20" layoutY="170" prefWidth="860" prefHeight="500"
+                style="-fx-background-color: white; -fx-border-color: #34495e; -fx-border-width: 2;">
+        <content>
+            <Canvas fx:id="treeCanvas" width="800" height="600" />
+        </content>
+    </ScrollPane>
 
 </AnchorPane>

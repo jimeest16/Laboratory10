@@ -1,13 +1,11 @@
 package controller;
 
-import domain.AVL;
-import domain.BST;
-import domain.Tree;
-import domain.TreeException;
+import domain.*;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import util.FXUtil;
 
 
 public class OperationController {
@@ -22,21 +20,44 @@ public class OperationController {
     private AVL avlTree = new AVL();
     private Tree currentTree;
 
+    private double zoomActual = 1.0;
+    private double zoomStep = 0.1;// es el minimo antes que 0
 
+    @FXML
+    private ScrollPane scrollPane;
     @FXML
     public void initialize() {
         // SE INICIALIZA EN BST pero puedo variarlo con avl
         currentTree = new BST();
         bstRadio.setSelected(true);
+
+
+        scrollPane.setOnScroll(event -> {
+            if (event.isControlDown()) {
+                if (event.getDeltaY() > 0) {
+                    zoomActual += zoomStep;
+                } else {
+                    zoomActual -= zoomStep;
+                }
+                if (zoomActual < 0.1) zoomActual = 0.1;
+
+                treeCanvas.setScaleX(zoomActual);
+                treeCanvas.setScaleY(zoomActual);
+
+                scrollPane.layout();
+                event.consume();
+            }
+        });
+
         drawTree();
     }
 
     @FXML
     public void choiceTree() {
         if (bstRadio.isSelected()) {
-            currentTree = new BST();
+            currentTree = bstTree;
         } else {
-            currentTree = new AVL();
+            currentTree = avlTree;
         }
         drawTree();
     }
@@ -121,12 +142,18 @@ public class OperationController {
     }
 
     private void drawTree() {
-        GraphicsContext graphicsContext = treeCanvas.getGraphicsContext2D();
-        graphicsContext.clearRect(0, 0, treeCanvas.getWidth(), treeCanvas.getHeight());
-        //currentTree.draw(graphicsContext, treeCanvas.getWidth());
+        GraphicsContext gc = treeCanvas.getGraphicsContext2D();
+        gc.clearRect(0, 0, treeCanvas.getWidth(), treeCanvas.getHeight());
 
-      //  balanceStatusLabel.setText(currentTree.isBalanced() ? "Balanced ✓" : "Not Balanced ✗");
+        double canvasWidth = 800;
+        double canvasHeight = 600;
+        treeCanvas.setWidth(canvasWidth);
+        treeCanvas.setHeight(canvasHeight);
+
+        FXUtil.drawBTreeNodes(gc, (BTreeNode) currentTree.getRoot(), canvasWidth / 2, 40, canvasWidth / 4);
+        balanceStatusLabel.setText(currentTree.isBalanced() ? "Balanced ✓" : "Not Balanced ✗");
     }
+
 
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

@@ -57,4 +57,6 @@ public interface Tree {
     //para mostrar todos los elementos existentes
     public String postOrder() throws TreeException;
     //private String postOrder(BTreeNode node)
+    Object getRoot();
+    boolean isBalanced();
 }
