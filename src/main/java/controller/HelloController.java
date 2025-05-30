@@ -28,7 +28,7 @@ public class HelloController {
 
     @FXML
     public void Home(ActionEvent actionEvent) {
-        this.txtMessage.setText("Laboratory No. 7" +
+        this.txtMessage.setText("Laboratory No. 10" +
                 "\n Click on the bottons in your left!");
         this.bp.setCenter(ap);
     }

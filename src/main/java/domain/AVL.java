@@ -8,8 +8,8 @@ import static util.Utility.compare;
  * Binary Search Tree AVL (Arbol de Búsqueda Binaria AVL)
  * AVL = Arbol de busqueda binaria auto balanceado
  * */
-public class AVL implements  Tree {
-    private BTreeNode root; //se refiere a la raiz del arbol
+public class AVL implements Tree {
+    public BTreeNode root; //se refiere a la raiz del arbol
 
     @Override
     public int size() throws TreeException {
@@ -21,21 +21,22 @@ public class AVL implements  Tree {
         return root;
     }
 
-//    @Override
-//    public boolean isBalanced() {
-//        return isBalanced( root);
-//    }
-//
-//    private boolean isBalanced(BTreeNode node) {
-//        if (node == null) return true;
-//
-//        int leftHeight = height(node.left);
-//        int rightHeight = height(node.right);
-//
-//        if (Math.abs(leftHeight - rightHeight) > 1) return false;
-//
-//        return isBalanced(node.left) && isBalanced(node.right);
-//    }
+
+    @Override
+    public boolean isBalanced() {
+        return isBalanced( root);
+    }
+
+    private boolean isBalanced(BTreeNode node) {
+        if (node == null) return true;
+
+        int leftHeight = height(node.left);
+        int rightHeight = height(node.right);
+
+        if (Math.abs(leftHeight - rightHeight) > 1) return false;
+
+        return isBalanced(node.left) && isBalanced(node.right);
+    }
 
 
     private int size(BTreeNode node) {
@@ -436,14 +437,6 @@ public class AVL implements  Tree {
     }
     // uso de los operadores ternarios: la primer parte debe de cumplirse, la segunda no
 
-    public boolean isBalanced(){
-        switch (getBalanceFactor(root) ){
-            case 0: return true;
-            case 1: return false;
-            case -1: return false;
-    }
-    return false;
-    }
 
     public boolean isAVL(){
         switch (getBalanceFactor(root) ){
