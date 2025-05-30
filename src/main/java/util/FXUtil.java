@@ -11,6 +11,7 @@ import javafx.util.converter.IntegerStringConverter;
 import ucr.lab.HelloApplication;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 
 public class FXUtil {
@@ -35,7 +36,7 @@ public class FXUtil {
         myalert.setTitle(title);
         myalert.setHeaderText(headerText);
         DialogPane dialogPane = myalert.getDialogPane();
-        String css = HelloApplication.class.getResource("dialog.css").toExternalForm();
+        String css = Objects.requireNonNull(HelloApplication.class.getResource("/ucr/lab/stylesheet.css")).toExternalForm();
         dialogPane.getStylesheets().add(css);
         dialogPane.getStyleClass().add("myDialog");
         return myalert;
@@ -79,7 +80,7 @@ public class FXUtil {
         myalert.getDialogPane().getButtonTypes().add(buttonTypeNo);
         //dialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
         DialogPane dialogPane = myalert.getDialogPane();
-        String css = HelloApplication.class.getResource("dialog.css").toExternalForm();
+        String css = Objects.requireNonNull(HelloApplication.class.getResource("dialog.css")).toExternalForm();
         dialogPane.getStylesheets().add(css);
         Optional<ButtonType> result = myalert.showAndWait();
         //if((result.isPresent())&&(result.get()== ButtonType.OK)) {
@@ -125,5 +126,18 @@ public class FXUtil {
         }
     }
 
+    public static void drawLevelLines(GraphicsContext gc, int treeHeight, double rootY, double verticalSpacing, double canvasWidth) {
+        gc.setStroke(Color.GRAY);
+        gc.setFill(Color.DARKGRAY);
+        gc.setFont(new Font(12));
+        gc.setLineDashes(4); // Línea punteada
 
+        for (int level = 0; level < treeHeight; level++) {
+            double y = rootY + level * verticalSpacing;
+            gc.strokeLine(0, y, canvasWidth, y);
+            gc.fillText("Nivel " + level, 5, y - 5); // Texto ligeramente arriba
+        }
+
+        gc.setLineDashes(0); // Restablece a línea sólida
+    }
 }

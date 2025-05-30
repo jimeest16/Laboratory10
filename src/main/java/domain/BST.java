@@ -14,6 +14,8 @@ public class BST implements  Tree {
             throw new TreeException("Binary Search Tree is empty");
         return size(root);
     }
+
+    @Override
     public BTreeNode getRoot() {
         return root;
     }
@@ -24,14 +26,10 @@ public class BST implements  Tree {
     }
     private boolean isBalanced(BTreeNode node){
         if(node==null) return true;
-
-            int leftHeight=height(node.left);
-            int rightHeight=height(node.right);
-
-            if(Math.abs(leftHeight-rightHeight)>1) return false;
-
-            return isBalanced(node.left) && isBalanced(node.right);
-
+        int leftHeight=height(node.left);
+        int rightHeight=height(node.right);
+        if(Math.abs(leftHeight-rightHeight)>1) return false;
+        return isBalanced(node.left) && isBalanced(node.right);
     }
 
     private int size(BTreeNode node){
@@ -56,7 +54,7 @@ public class BST implements  Tree {
         return binarySearch(root, element);
     }
 
-    private boolean binarySearch(BTreeNode node, Object element){
+    private boolean binarySearch(BTreeNode node, Object element) throws TreeException {
         if(node==null) return false;
         else if(util.Utility.compare(node.data, element)==0) return true;
         else if(util.Utility.compare(element, node.data)<0)
@@ -65,16 +63,16 @@ public class BST implements  Tree {
     }
 
     @Override
-    public void add(Object element) {
+    public void add(Object element) throws TreeException {
        this.root = add(root, element);
     }
 
-    private BTreeNode add(BTreeNode node, Object element){
+    private BTreeNode add(BTreeNode node, Object element) throws TreeException {
         if(node==null)
             node = new BTreeNode(element);
         else if(util.Utility.compare(element, node.data)<0)
             node.left = add(node.left, element);
-        else if(util.Utility.compare(element, node.data)>0)
+        else if(util.Utility.compare(element, node.data)>=0)
             node.right = add(node.right, element);
         return node;
     }
@@ -86,7 +84,7 @@ public class BST implements  Tree {
         root = remove(root, element);
     }
 
-    private BTreeNode remove(BTreeNode node, Object element) throws TreeException{
+    private BTreeNode remove(BTreeNode node, Object element) throws TreeException {
         if(node!=null){
             if(util.Utility.compare(element, node.data)<0)
               node.left = remove(node.left, element);
@@ -128,7 +126,7 @@ public class BST implements  Tree {
     }
 
     //devuelve la altura de un nodo (el número de ancestros)
-    private int height(BTreeNode node, Object element, int level){
+    private int height(BTreeNode node, Object element, int level) throws TreeException {
         if(node==null) return 0;
         else if(util.Utility.compare(node.data, element)==0) return level;
         else return Math.max(height(node.left, element, ++level),

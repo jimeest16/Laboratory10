@@ -1,5 +1,8 @@
 package util;
 
+import domain.Tree;
+import domain.TreeException;
+
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -69,28 +72,24 @@ public class Utility {
     }
 
     // Método para comparar dos objetos de distintos tipos
-    public static int compare(Object a, Object b) {
+    public static int compare(Object a, Object b) throws TreeException {
         switch (instanceOf(a, b)) {
             case "Integer":
                 Integer int1 = (Integer) a;
                 Integer int2 = (Integer) b;
                 return int1 < int2 ? -1 : int1 > int2 ? 1 : 0;
-
             case "String":
                 String str1 = (String) a;
                 String str2 = (String) b;
                 return str1.compareTo(str2) < 0 ? -1 : str1.compareTo(str2) > 0 ? 1 : 0;
-
             case "Character":
                 Character ch1 = (Character) a;
                 Character ch2 = (Character) b;
                 return ch1.compareTo(ch2) < 0 ? -1 : ch1.compareTo(ch2) > 0 ? 1 : 0;
-
-            case "Climate":
-                Character c1 = (Character) a;
-                Character c2 = (Character) b;
-                return c1.compareTo(c2) < 0 ? -1 : c1.compareTo(c2) > 0 ? 1 : 0;
-
+            case "Tree":
+                int size1 = ((Tree) a).size();
+                int size2 = ((Tree) b).size();
+                return size1 < size2 ? -1 : size1 > size2 ? 1 : 0;
             default:
                 return 2; // Unknown
         }
@@ -105,47 +104,13 @@ public class Utility {
         };
     }
 
-
     // Método para obtener el tipo de instancia de dos objetos
     public static String instanceOf(Object a, Object b) {
         if (a instanceof Integer && b instanceof Integer) return "Integer";
         if (a instanceof String && b instanceof String) return "String";
         if (a instanceof Character && b instanceof Character) return "Character";
-
+        if (a instanceof Tree && b instanceof Tree) return "Tree";
         return "Unknown";
     }
-
-    public static int getAge(Date date) {
-
-        LocalDate birthDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
-        LocalDate today = LocalDate.now();
-
-        return Period.between(birthDate, today).getYears();
-    }
-
-    public static String dateFormat(Date value) {
-        return new SimpleDateFormat("dd/MM/yyyy").format(value);
-
-
-    }
-
-    public static String getPlace() {
-        String[] places = {
-                "San José", "Ciudad Quesada", "Paraíso", "Turrialba", "Limón", "Liberia",
-                "Puntarenas", "San Ramón", "Puerto Viejo", "Volcán Irazú", "Pérez Zeledón",
-                "Palmares", "Orotina", "El coco", "Ciudad Neilly", "Sixaola", "Guápiles",
-                "Siquirres", "El Guarco", "Cartago", "Santa Bárbara", "Jacó", "Manuel Antonio",
-                "Quepos", "Santa Cruz", "Nicoya"
-        };
-        return places[random(places.length-1)];
-    }
-    public static String getWeather(){
-        String[] weathers = {
-                "rainy", "thunderstorm", "sunny", "cloudy", "foggy"
-        };
-        return weathers[random(weathers.length-1)];
-    }
-
 }
 

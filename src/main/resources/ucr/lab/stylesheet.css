@@ -11,7 +11,6 @@
 }
 
 .button {
-    -fx-font-family: "Arial";
     -fx-font-size: 20px;
     -fx-font-weight: bold;
     -fx-background-color: #e0ecb9; /* Botones con #e0ecb9 */
@@ -164,7 +163,6 @@
 
 .date-picker > .text-field {
     -fx-font: 20px "Arial";
-    -fx-background-color: linear-gradient(to bottom, derive(-fx-text-box-border, -10%), -fx-text-box-border), linear-gradient(from 0px 0px to 0px 5px, derive(-fx-control-inner-background, -9%), -fx-control-inner-background);
     /*-fx-background-color:
             linear-gradient(to bottom, derive(-fx-text-box-border, -10%), -fx-text-box-border),
             linear-gradient(from 0px 0px to 0px 5px, derive(-fx-control-inner-background, -9%), -fx-control-inner-background);

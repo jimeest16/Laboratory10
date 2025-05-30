@@ -17,10 +17,11 @@ public class AVL implements Tree {
             throw new TreeException("AVL Binary Search Tree is empty");
         return size(root);
     }
+
+    @Override
     public BTreeNode getRoot() {
         return root;
     }
-
 
     @Override
     public boolean isBalanced() {
@@ -61,7 +62,7 @@ public class AVL implements Tree {
         return binarySearch(root, element);
     }
 
-    private boolean binarySearch(BTreeNode node, Object element) {
+    private boolean binarySearch(BTreeNode node, Object element) throws TreeException {
         if (node == null) return false;
         else if (compare(node.data, element) == 0) return true;
         else if (compare(element, node.data) < 0)
@@ -70,11 +71,11 @@ public class AVL implements Tree {
     }
 
     @Override
-    public void add(Object element) {
+    public void add(Object element) throws TreeException {
         this.root = add(root, element, "root");
     }
 
-    private BTreeNode add(BTreeNode node, Object element, String path) {
+    private BTreeNode add(BTreeNode node, Object element, String path) throws TreeException {
         if (node == null)
             node = new BTreeNode(element, path);
         else if (compare(element, node.data) < 0)
@@ -87,7 +88,7 @@ public class AVL implements Tree {
         return node;
     }
 
-    private BTreeNode reBalance(BTreeNode node, Object element) {
+    private BTreeNode reBalance(BTreeNode node, Object element) throws TreeException {
         //debemos obtener el factor de balanceo, si es 0, -1, 1 está balanceado, si es <=-2, >=2 hay que rebalancear
         int balance = getBalanceFactor(node);
 
@@ -210,7 +211,7 @@ public class AVL implements Tree {
     }
 
     //devuelve la altura de un nodo (el número de ancestros)
-    private int height(BTreeNode node, Object element, int level) {
+    private int height(BTreeNode node, Object element, int level) throws TreeException {
         if (node == null) return 0;
         else if (compare(node.data, element) == 0) return level;
         else return Math.max(height(node.left, element, ++level),
@@ -333,7 +334,7 @@ public class AVL implements Tree {
 
     @Override
     public String toString() {
-        String result = "AVL Binary Search Tree Content:";
+        String result;
         try {
             result = "PreOrder: " + preOrderPath(root);
             result += "\nPreOrder: " + preOrder();
@@ -354,7 +355,7 @@ public class AVL implements Tree {
         return father(root, element);
     }
 
-    private Object father(BTreeNode node, Object element) {
+    private Object father(BTreeNode node, Object element) throws TreeException {
         if (node == null) return null;
 
         // Si el hijo izquierdo o derecho contiene el valor buscado,
@@ -380,7 +381,7 @@ public class AVL implements Tree {
         return brother(root, element);
     }
 
-    private Object brother(BTreeNode node, Object element) {
+    private Object brother(BTreeNode node, Object element) throws TreeException {
         if (node == null) return null;
 
         // Si el hijo izquierdo es el elemento buscado
@@ -409,7 +410,7 @@ public class AVL implements Tree {
         return children(root, element);
     }
 
-    private String children(BTreeNode node, Object element) {
+    private String children(BTreeNode node, Object element) throws TreeException {
         if (node == null) {
             return "Elemento no encontrado";
         }
@@ -442,12 +443,12 @@ public class AVL implements Tree {
 
 
     public boolean isAVL(){
-        switch (getBalanceFactor(root) ){
-            case 0: return false;
-            case 1: return true;
-            case -1: return true;
-        }
-        return false;
+        return switch (getBalanceFactor(root)) {
+            case 0 -> false;
+            case 1 -> true;
+            case -1 -> true;
+            default -> false;
+        };
     }
 
 

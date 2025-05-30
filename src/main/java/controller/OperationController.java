@@ -75,6 +75,8 @@ public class OperationController {
                 drawBTreeNodes();
             } catch (NumberFormatException e) {
                 showAlert("Invalid number!");
+            } catch (TreeException e) {
+                showAlert("Error!");
             }
         });
     }
@@ -158,14 +160,14 @@ public class OperationController {
             showAlert("Error: " + e.getMessage());
         }
     }
-@FXML
-    public void handleRandomize() {
+    @FXML
+    public void handleRandomize() throws TreeException {
         randomize(30);
 
         drawBTreeNodes();
     }
 
-    private void randomize(int n) {
+    private void randomize(int n) throws TreeException {
         if (bstRadio.isSelected()) {
             bTree.root = null; // reinicia raíz BST
             for (int i = 0; i < n; i++) {

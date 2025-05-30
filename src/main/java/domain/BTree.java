@@ -32,7 +32,7 @@ public class BTree implements  Tree {
         return binarySearch(root, element);
     }
 
-    private boolean binarySearch(BTreeNode node, Object element){
+    private boolean binarySearch(BTreeNode node, Object element) throws TreeException {
         if(node==null) return false;
         else if(util.Utility.compare(node.data, element)==0) return true;
         return binarySearch(node.left, element) || binarySearch(node.right, element);
@@ -78,7 +78,7 @@ public class BTree implements  Tree {
         //root = remove(root, element);
     }
 
-    private BTreeNode remove(BTreeNode node, Object element, boolean[] deleted) throws TreeException{
+    private BTreeNode remove(BTreeNode node, Object element, boolean[] deleted) throws TreeException {
         if(node!=null){
             if(util.Utility.compare(node.data, element)==0){
                 deleted[0] = true; // cambia a true porque lo va a eliminar
@@ -139,7 +139,7 @@ public class BTree implements  Tree {
         return aux;
     }
 
-    private BTreeNode removeLeaf(BTreeNode node, Object value, boolean[] deleted){
+    private BTreeNode removeLeaf(BTreeNode node, Object value, boolean[] deleted) throws TreeException {
         if(node==null) return null;
         //si es una hoja y esa hoja es la que andamos buscando, la eliminamos
         else if(node.left==null&&node.right==null&&util.Utility.compare(node.data, value)==0) {
@@ -160,7 +160,7 @@ public class BTree implements  Tree {
     }
 
     //devuelve la altura de un nodo (el número de ancestros)
-    private int height(BTreeNode node, Object element, int level){
+    private int height(BTreeNode node, Object element, int level) throws TreeException {
         if(node==null) return 0;
         else if(util.Utility.compare(node.data, element)==0) return level;
         else return Math.max(height(node.left, element, ++level),
@@ -190,12 +190,12 @@ public class BTree implements  Tree {
     }
 
     @Override
-    public Object min() throws TreeException {
+    public Object min() {
         return null;
     }
 
     @Override
-    public Object max() throws TreeException {
+    public Object max() {
         return null;
     }
 
@@ -245,8 +245,8 @@ public class BTree implements  Tree {
     }
 
     @Override
-    public Object getRoot() {
-        return null;
+    public BTreeNode getRoot() {
+        return root;
     }
 
     @Override
@@ -267,7 +267,7 @@ public class BTree implements  Tree {
 
     @Override
     public String toString() {
-        String result="Binary Tree Content:";
+        String result;
         try {
             result = "PreOrder: "+preOrder();
             result+= "\nInOrder: "+inOrder();
