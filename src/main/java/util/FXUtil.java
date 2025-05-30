@@ -88,37 +88,42 @@ public class FXUtil {
         else return "NO";
     }
 
-    // permite dibujar-> es mas de diseño que logica
-    public static void drawBTreeNodes(GraphicsContext bTree, BTreeNode node, double posX, double posY, double spaceDispo) {
+    public static void drawTreeNode(GraphicsContext gc, BTreeNode node, double x, double y, double horizontalSpacing) {
         if (node == null) return;
-        // primero el nodo( OVAL)
-        bTree.setFill(Color.LIGHTBLUE);
-        // LAS POSICIONES FUERON LAS MAS CERCANAS QUE PUDE LOGRAR A PROBAR
-        bTree.fillOval(posX - 15, posY - 15, 30, 30);
-        bTree.setStroke(Color.BLACK);
-        // linea de borde: solo para diseño, iguales que las del relleno para que concuerden
-        bTree.strokeOval(posX - 15, posY - 15, 30, 30);
 
-        // el valor del node
-        bTree.setFill(Color.BLACK);
-        bTree.setFont(new Font(15));
-        // los valores de las posiciones para que queden alineados son esos
-        bTree.fillText(String.valueOf(node.data), posX - 6, posY + 5);
+        double radius = 15; // Radio para el nodo
+        double diameter = radius * 2;// terminaria siendo 30
 
-        //  número segun el recorrido
+
+        gc.setFill(Color.LIGHTBLUE);
+        gc.fillOval(x - radius, y - radius, diameter, diameter);
+        gc.setStroke(Color.BLACK);
+        gc.strokeOval(x - radius, y - radius, diameter, diameter);
+
+        // Dibuja el valor del nodo
+        gc.setFill(Color.BLACK);
+        gc.setFont(new Font(15));
+        gc.fillText(String.valueOf(node.data), x - 7, y + 5);
+
+        // Dibuja counterTranversal si es distinto de 0
         if (node.counterTranversal != 0) {
-            bTree.setFont(new Font(10));
-            bTree.fillText(String.valueOf(node.counterTranversal), posX - 5, posY + 25);
+            gc.setFont(new Font(10));
+            gc.fillText(String.valueOf(node.counterTranversal), x - 7, y + 25);
         }
-        // recursividad para dibujar ambos lados
+
+        double verticalSpacing = 60;
+
+        // Dibuja líneas y dibuja hijos recursivamente
         if (node.left != null) {
-            bTree.strokeLine(posX, posY + 15, posX - spaceDispo, posY + 50 - 15);
-            drawBTreeNodes(bTree, node.left, posX - spaceDispo, posY + 50, spaceDispo / 2);
+            gc.strokeLine(x, y + radius, x - horizontalSpacing, y + verticalSpacing - radius);
+            drawTreeNode(gc, node.left, x - horizontalSpacing, y + verticalSpacing, horizontalSpacing / 2);
         }
 
         if (node.right != null) {
-            bTree.strokeLine(posX, posY + 15, posX + spaceDispo, posY + 50 - 15);
-            drawBTreeNodes(bTree, node.right, posX + spaceDispo, posY + 50, spaceDispo / 2);
+            gc.strokeLine(x, y + radius, x + horizontalSpacing, y + verticalSpacing - radius);
+            drawTreeNode(gc, node.right, x + horizontalSpacing, y + verticalSpacing, horizontalSpacing / 2);
         }
     }
+
+
 }

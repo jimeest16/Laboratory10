@@ -9,6 +9,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import util.FXUtil;
 
+import static util.FXUtil.drawTreeNode;
 import static util.Utility.Random;
 import static util.Utility.random;
 
@@ -183,8 +184,7 @@ public class TourController {
         if (rbBST.isSelected()){
             if (bTree.root != null) {// si hay raiz entonces permite llamar metodo drawBTreeNodes
                 // getWidth()/2 para que se centrara el arbol
-                FXUtil.drawBTreeNodes(treeGraphic, bTree.root, treeCanvas.getWidth() / 2, 35, treeCanvas.getWidth() / 4);
-                // parametros ( arbol, nodo( refere) , posicion del arbol x , posicion del arbol y , el espacio dispo)
+                drawTreeNode(treeGraphic, bTree.root, treeCanvas.getWidth() / 2, 40, treeCanvas.getWidth() / 4);
             }
         }
         //avl tree
@@ -192,11 +192,9 @@ public class TourController {
             if (aTree.root != null) {// si hay raiz entonces permite llamar metodo drawBTreeNodes
                 // getWidth()/2 para que se centrara el arbol
                 aTree.leftRotate(aTree.root);
-                FXUtil.drawBTreeNodes(treeGraphic, aTree.root, treeCanvas.getWidth() / 2, 35, treeCanvas.getWidth() / 4);
-                // parametros ( arbol, nodo( refere) , posicion del arbol x , posicion del arbol y , el espacio dispo)
+                drawTreeNode(treeGraphic, aTree.root, treeCanvas.getWidth() / 2, 40, treeCanvas.getWidth() / 4);
+            }//parametros ( arbol, nodo( refere) , posicion del arbol x , posicion del arbol y , el espacio dispo)
             }
-        }
-
 
     }
 }

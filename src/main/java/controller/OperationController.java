@@ -5,7 +5,10 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
-import util.FXUtil;
+
+import static util.FXUtil.drawTreeNode;
+import static util.Utility.Random;
+import static util.Utility.random;
 
 public class OperationController {
 
@@ -21,26 +24,17 @@ public class OperationController {
     @FXML private Button treeHeightButton;
     @FXML private Button randomizeButton;
 
-    private ToggleGroup treeTypeGroup;
-
-    private BST bstTree = new BST();
-    private AVL avlTree = new AVL();
-    private Tree currentTree;
+    private final BST bTree = new BST();
+    private final AVL aTree = new AVL();
 
     private double zoomActual = 1.0;
     private final double zoomStep = 0.1;
 
     @FXML
     public void initialize() {
-        // Grupo manual de RadioButtons
-        treeTypeGroup = new ToggleGroup();
-        bstRadio.setToggleGroup(treeTypeGroup);
-        avlRadio.setToggleGroup(treeTypeGroup);
-
-        // Valor inicial
-        currentTree = bstTree;
-        bstRadio.setSelected(true);
-
+        ToggleGroup group = new ToggleGroup();
+        avlRadio.setToggleGroup(group);
+        bstRadio.setToggleGroup(group);
 
         treeCanvas.setOnScroll(event -> {
             if (event.isControlDown()) {
@@ -58,14 +52,12 @@ public class OperationController {
                 event.consume();
             }
         });
-
-        drawTree();
     }
 
     @FXML
     public void choiceTree() {
-        currentTree = bstRadio.isSelected() ? bstTree : avlTree;
-        drawTree();
+        // Redibuja el árbol seleccionado
+        drawBTreeNodes();
     }
 
     @FXML
@@ -74,8 +66,13 @@ public class OperationController {
         dialog.setHeaderText("Enter value to add:");
         dialog.showAndWait().ifPresent(value -> {
             try {
-                currentTree.add(Integer.parseInt(value));
-                drawTree();
+                int val = Integer.parseInt(value);
+                if (bstRadio.isSelected()) {
+                    bTree.add(val);
+                } else if (avlRadio.isSelected()) {
+                    aTree.add(val);
+                }
+                drawBTreeNodes();
             } catch (NumberFormatException e) {
                 showAlert("Invalid number!");
             }
@@ -88,8 +85,13 @@ public class OperationController {
         dialog.setHeaderText("Enter value to remove:");
         dialog.showAndWait().ifPresent(value -> {
             try {
-                currentTree.remove(Integer.parseInt(value));
-                drawTree();
+                int val = Integer.parseInt(value);
+                if (bstRadio.isSelected()) {
+                    bTree.remove(val);
+                } else if (avlRadio.isSelected()) {
+                    aTree.remove(val);
+                }
+                drawBTreeNodes();
             } catch (NumberFormatException e) {
                 showAlert("Invalid number!");
             } catch (TreeException e) {
@@ -104,7 +106,13 @@ public class OperationController {
         dialog.setHeaderText("Enter value to search:");
         dialog.showAndWait().ifPresent(value -> {
             try {
-                boolean found = currentTree.contains(Integer.parseInt(value));
+                int val = Integer.parseInt(value);
+                boolean found = false;
+                if (bstRadio.isSelected()) {
+                    found = bTree.contains(val);
+                } else if (avlRadio.isSelected()) {
+                    found = aTree.contains(val);
+                }
                 showAlert("Value " + (found ? "found." : "not found."));
             } catch (NumberFormatException e) {
                 showAlert("Invalid number!");
@@ -120,8 +128,14 @@ public class OperationController {
         dialog.setHeaderText("Enter node value:");
         dialog.showAndWait().ifPresent(value -> {
             try {
-                int height = currentTree.height(Integer.parseInt(value));
-                showAlert("Height of node " + value + " is: " + height);
+                int val = Integer.parseInt(value);
+                int height = -1;
+                if (bstRadio.isSelected()) {
+                    height = bTree.height(val);
+                } else if (avlRadio.isSelected()) {
+                    height = aTree.height(val);
+                }
+                showAlert("Height of node " + val + " is: " + height);
             } catch (NumberFormatException e) {
                 showAlert("Invalid input!");
             } catch (TreeException e) {
@@ -133,37 +147,60 @@ public class OperationController {
     @FXML
     public void treeHeightButton() {
         try {
-            int height = currentTree.height();
+            int height = -1;
+            if (bstRadio.isSelected()) {
+                height = bTree.height();
+            } else if (avlRadio.isSelected()) {
+                height = aTree.height();
+            }
             showAlert("Tree height is: " + height);
         } catch (TreeException e) {
             showAlert("Error: " + e.getMessage());
         }
     }
-
-    @FXML
+@FXML
     public void handleRandomize() {
-        currentTree.clear();
-        for (int i = 0; i < 10; i++) {
-            currentTree.add((int) (Math.random() * 100));
-        }
-        drawTree();
+        randomize(30);
+
+        drawBTreeNodes();
     }
 
-    private void drawTree() {
-        GraphicsContext gc = treeCanvas.getGraphicsContext2D();
-
-        gc.clearRect(0, 0, treeCanvas.getWidth(), treeCanvas.getHeight());
-
-        double canvasWidth = 600;
-        double canvasHeight = 600;
-        treeCanvas.setWidth(canvasWidth);
-        treeCanvas.setHeight(canvasHeight);
-
-        if (currentTree.getRoot() != null) {
-            FXUtil.drawBTreeNodes(gc, (BTreeNode) currentTree.getRoot(), canvasWidth / 2, 35, canvasWidth / 4);
+    private void randomize(int n) {
+        if (bstRadio.isSelected()) {
+            bTree.root = null; // reinicia raíz BST
+            for (int i = 0; i < n; i++) {
+                int value = Random(0, 50);
+                bTree.add(value);
+            }
+        } else if (avlRadio.isSelected()) {
+            aTree.root = null; // reinicia raíz AVL
+            for (int i = 0; i < n; i++) {
+                int value = random(50) + 1;
+                aTree.add(value);
+            }
         }
+        drawBTreeNodes();
+    }
 
-        balanceStatusLabel.setText(currentTree.isBalanced() ? "Balanced ✓" : "Not Balanced ✗");
+    private void drawBTreeNodes() {
+        GraphicsContext treeGraphic = treeCanvas.getGraphicsContext2D();
+        treeGraphic.clearRect(0, 0, treeCanvas.getWidth(), treeCanvas.getHeight());
+
+        if (bstRadio.isSelected()) {
+            // Dibuja el árbol BST
+            if (bTree.root != null) {
+                drawTreeNode(treeGraphic, bTree.root, treeCanvas.getWidth() / 2, 40, treeCanvas.getWidth() / 4);
+            }
+            balanceStatusLabel.setText(bTree.isBalanced() ? "Balanced ✓" : "Not Balanced ✗");
+        } else if (avlRadio.isSelected()) {
+            // Dibuja el árbol AVL
+            if (aTree.root != null) {
+                drawTreeNode(treeGraphic, aTree.root, treeCanvas.getWidth() / 2, 40, treeCanvas.getWidth() / 4);
+            }
+            balanceStatusLabel.setText(aTree.isBalanced() ? "Balanced ✓" : "Not Balanced ✗");
+        } else {
+            balanceStatusLabel.setText("No tree selected");
+        }
     }
 
     private void showAlert(String message) {
