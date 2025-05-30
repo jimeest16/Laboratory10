@@ -128,7 +128,7 @@ public class AVL implements Tree {
         }
     }
 
-    private BTreeNode leftRotate(BTreeNode node) {
+    public BTreeNode leftRotate(BTreeNode node) {
         BTreeNode node1 = node.right;
         if (node1 != null) { //importante para evitar NullPointerException
             BTreeNode node2 = node1.left;
@@ -139,7 +139,7 @@ public class AVL implements Tree {
         return node1;
     }
 
-    private BTreeNode rightRotate(BTreeNode node) {
+    public BTreeNode rightRotate(BTreeNode node) {
         BTreeNode node1 = node.left;
         if (node1 != null) { //importante para evitar NullPointerException
             BTreeNode node2 = node1.right;
@@ -185,14 +185,17 @@ public class AVL implements Tree {
                     Object value = min(node.right);
                     node.data = value;
                     node.right = remove(node.right, value);
+
+                    //si el arbol no es balanceado AVL,  re-balancear para que quede como un avl
+                    reBalance(node,element);
+                    switch (getBalanceFactor(root) ){
+                        case 0: leftRotate(node);//balanceado pero dejar como AVL
+                        case 1: return node; //ya es AVL por la derecha
+                        case -1: return node; //ya es AVL por la izquierda
+                        case -2: return rightRotate(node); //rotación a la derecha
+                        case 2: return leftRotate(node);//rotación a la izquierda
                 }
-                //si el arbol no es balanceado AVL,  re-balancear para que quede como un avl
-                switch (getBalanceFactor(root) ){
-                    case 0: leftRotate(node);//balanceado pero dejar como AVL
-                    case 1: return node; //ya es AVL por la derecha
-                    case -1: return node; //ya es AVL por la izquierda
-                    case -2: return rightRotate(node); //rotación a la derecha
-                    case 2: return leftRotate(node);//rotación a la izquierda
+
                 }
             }
         }

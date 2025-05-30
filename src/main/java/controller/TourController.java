@@ -191,6 +191,7 @@ public class TourController {
         if (rbAVL.isSelected()){
             if (aTree.root != null) {// si hay raiz entonces permite llamar metodo drawBTreeNodes
                 // getWidth()/2 para que se centrara el arbol
+                aTree.leftRotate(aTree.root);
                 FXUtil.drawBTreeNodes(treeGraphic, aTree.root, treeCanvas.getWidth() / 2, 35, treeCanvas.getWidth() / 4);
                 // parametros ( arbol, nodo( refere) , posicion del arbol x , posicion del arbol y , el espacio dispo)
             }
